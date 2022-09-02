@@ -1,0 +1,27 @@
+version: '3'
+services:
+
+  # Nginx Service
+  webserver:
+    build:
+      context: ./nginx
+    image: webserver_nginx
+    restart: always
+    container_name: webserver_nginx
+    volumes:
+      - ./nginx/ip2proxy/:/usr/share/ip2location/
+      - ./nginx/config/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/config/conf.d/:/etc/nginx/conf.d/:ro
+      - ./nginx/config/security/:/etc/nginx/security/:ro
+      - ./logs/nginx/:/var/log/nginx/:rw
+      - ./sites:/var/www:rw
+    ports:
+     - 80:80
+     - 443:443
+    networks:
+      - app-network
+
+#Docker Networks
+networks:
+  app-network:
+    driver: bridge
